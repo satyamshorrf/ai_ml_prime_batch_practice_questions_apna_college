@@ -24,3 +24,31 @@ print (type(isPrime))
 
 Hey = None
 print (type(Hey))
+
+
+
+#Out # My name is Satyam Shorrf
+
+
+'''
+this is a multi line comment
+in python
+
+
+'''
+
+
+'''
+
+Keywords in Python
+
+False None as assert break class continue def del elif else except finally for from global if import in is lambda nonlocal not or pass raise return try while with yield
+
+
+
+
+
+
+
+
+'''
