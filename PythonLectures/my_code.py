@@ -52,3 +52,19 @@ False None as assert break class continue def del elif else except finally for f
 
 
 '''
+
+
+
+#Sum of two numbers
+
+first_number = 23
+second_number = 45 
+
+sum = first_number + second_number
+
+print("The sum is:", sum)
+
+
+
+
+
