@@ -1,0 +1,582 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>AI/ML Mastery · Shared Progress Tracker (Import/Export)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f1f5f9;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            padding: 2rem 1.5rem;
+            color: #0f172a;
+        }
+
+        .tracker-wrapper {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .hero-card {
+            background: white;
+            border-radius: 2rem;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        h1 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1e293b, #2c3e66);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .stack-badge {
+            background: #eef2ff;
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #2563eb;
+            display: inline-block;
+            margin-left: 1rem;
+        }
+
+        .subhead {
+            color: #475569;
+            margin-top: 0.6rem;
+            border-left: 4px solid #3b82f6;
+            padding-left: 1rem;
+            font-weight: 500;
+        }
+
+        .global-progress-panel {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.2rem 1.8rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+            border: 1px solid #e2e8f0;
+        }
+
+        .stats-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .stats-left {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        .stats-left span {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #2563eb;
+            margin: 0 3px;
+        }
+        .percent-badge {
+            background: #0f172a;
+            padding: 0.3rem 1.2rem;
+            border-radius: 60px;
+            color: white;
+            font-weight: 700;
+            font-size: 1.4rem;
+            font-family: monospace;
+        }
+
+        .progress-bar-bg {
+            background: #e2e8f0;
+            border-radius: 60px;
+            height: 1.2rem;
+            overflow: hidden;
+            margin: 0.7rem 0 1rem 0;
+        }
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #2563eb, #38bdf8);
+            border-radius: 60px;
+            transition: width 0.35s ease;
+        }
+
+        .action-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+        .btn {
+            border: none;
+            background: #f1f5f9;
+            padding: 0.45rem 1.3rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.2s;
+            color: #1e293b;
+        }
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+            box-shadow: 0 2px 6px rgba(37,99,235,0.2);
+        }
+        .btn-primary:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+        .btn-outline:hover {
+            background: #e2e8f0;
+        }
+        .btn-import {
+            background: #2d3e50;
+            color: white;
+        }
+        .btn-import:hover {
+            background: #1f2c3a;
+        }
+
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 1.3rem;
+        }
+
+        .topic-card {
+            background: white;
+            border-radius: 1.5rem;
+            border: 1px solid #e9edf2;
+            overflow: hidden;
+            transition: all 0.2s;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+        }
+        .topic-card:hover {
+            border-color: #cbdff2;
+            box-shadow: 0 12px 20px -12px rgba(0,0,0,0.1);
+        }
+
+        .topic-header {
+            background: #fafcff;
+            padding: 1rem 1.2rem;
+            border-bottom: 1px solid #edf2f7;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .topic-name {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #0c4e6e;
+        }
+        .topic-stats {
+            font-size: 0.7rem;
+            background: #eef2ff;
+            padding: 0.2rem 0.7rem;
+            border-radius: 30px;
+            font-weight: 600;
+            color: #1e40af;
+        }
+
+        .subtopic-list {
+            padding: 0.8rem 1rem 1rem 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.65rem;
+        }
+        .sub-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.85rem;
+            padding: 0.2rem 0;
+        }
+        .sub-item label {
+            flex: 1;
+            cursor: pointer;
+            color: #2d3a4b;
+            font-weight: 450;
+        }
+        .sub-item input {
+            width: 1.3rem;
+            height: 1.3rem;
+            cursor: pointer;
+            accent-color: #2563eb;
+        }
+        .sub-item.completed label {
+            text-decoration: line-through;
+            color: #6c7a91;
+        }
+
+        .footer-note {
+            margin-top: 2.5rem;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #5b6e8c;
+            border-top: 1px solid #cbd5e1;
+            padding-top: 1.5rem;
+        }
+
+        @media (max-width: 700px) {
+            body { padding: 1rem; }
+            .topics-grid { grid-template-columns: 1fr; }
+            .stats-row { flex-direction: column; align-items: flex-start; }
+        }
+
+        .file-input-label {
+            position: relative;
+            display: inline-block;
+        }
+        #importFileInput {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="tracker-wrapper">
+    <div class="hero-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+            <h1>📚 AI/ML Prime · Shared Progress Tracker</h1>
+            <div class="stack-badge">⚙️ localStorage + Import/Export (no external storage)</div>
+        </div>
+        <div class="subhead">Track your mastery of AI/ML concepts with subtopics, persistent checkmarks, and shareable progress files.</div>
+    </div>
+
+    <div class="global-progress-panel">
+        <div class="stats-row">
+            <div class="stats-left">
+                🎯 Completed subtopics: <span id="completedSubCount">0</span> / <span id="totalSubCount">0</span>
+            </div>
+            <div class="percent-badge" id="globalPercent">0%</div>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-fill" id="globalFillBar" style="width:0%"></div>
+        </div>
+        <div class="action-group">
+            <button class="btn" id="resetAllBtn">⟳ Reset all</button>
+            <button class="btn btn-primary" id="markAllSubtopicsBtn">✅ Complete all</button>
+            <button class="btn btn-import" id="exportBtn">💾 Export progress (.json)</button>
+            <label class="btn btn-import file-input-label" id="importLabelBtn">
+                📂 Import progress
+                <input type="file" id="importFileInput" accept=".json">
+            </label>
+        </div>
+    </div>
+
+    <div class="topics-grid" id="topicsGrid"></div>
+    <div class="footer-note">
+        💾 Auto-saves to localStorage — ticks remain after page reload.<br>
+        📌 Export your progress as a JSON file, send to a friend, they can Import it to see exactly the same checkmarks. No backend, no database.
+    </div>
+</div>
+
+<script>
+    // --------------------------------------------------------------
+    // CURRICULUM WITH SUBTOPICS (expanded from original list)
+    // --------------------------------------------------------------
+    const curriculumData = [
+        { topic: "🐍 Python", subtopics: ["Syntax & Data Types", "Control Flow", "Functions & Modules", "OOP", "NumPy & Pandas basics", "File I/O"] },
+        { topic: "📊 Data Pre-processing", subtopics: ["Cleaning (Nulls/Outliers)", "Normalization & Scaling", "Encoding categorical", "Feature Selection", "Train/Test Split", "Handling Imbalanced Data"] },
+        { topic: "📈 Data Visualization", subtopics: ["Matplotlib basics", "Seaborn", "Plotly interactive", "Custom styles", "Storytelling", "Dashboard concepts"] },
+        { topic: "🧮 Math for AI", subtopics: ["Descriptive stats", "Probability distributions", "Bayes theorem", "Hypothesis testing", "Linear algebra", "Calculus for ML"] },
+        { topic: "🎯 Precision, Recall, F1", subtopics: ["Confusion Matrix", "Precision & Recall", "F1 Score", "ROC & AUC", "Multi-class metrics", "Micro/Macro averaging"] },
+        { topic: "⚖️ Bias/Variance", subtopics: ["Under/Overfitting", "Bias & Variance", "Regularization L1/L2", "Cross-validation", "Learning curves", "Model complexity"] },
+        { topic: "🧠 Machine learning", subtopics: ["ML pipeline", "Feature engineering", "Hyperparameter tuning", "Evaluation metrics", "Ensemble methods", "Model deployment basics"] },
+        { topic: "📐 Supervised Learning", subtopics: ["Linear Regression", "Logistic Regression", "Decision Trees", "Random Forest", "k-NN & SVM", "Evaluation (MSE, Accuracy)"] },
+        { topic: "🔄 Unsupervised", subtopics: ["K-Means clustering", "Hierarchical clustering", "DBSCAN", "PCA", "Association rules", "t-SNE"] },
+        { topic: "🤖 Reinforcement Learning", subtopics: ["Markov Decision Process", "Q-Learning", "Policy vs Value", "Exploration/Exploitation", "Deep Q-Networks", "OpenAI Gym"] },
+        { topic: "📉 Logistic Regression", subtopics: ["Sigmoid function", "Log-odds", "Cross-Entropy Loss", "Gradient descent", "Multi-class (One-vs-Rest)", "Regularization"] },
+        { topic: "🌲 SVM, Decision Tree", subtopics: ["SVM margin & kernel", "Hard/Soft margin", "Decision Tree splitting", "Pruning", "Feature importance", "Bagging vs Boosting"] },
+        { topic: "🔵 K-means clustering", subtopics: ["Elbow method", "Centroid initialization", "Distance metrics", "Scalability", "Silhouette score", "K-means++"] },
+        { topic: "🔌 OpenAI APIs", subtopics: ["API keys & auth", "Text completion", "Chat Completions", "Embeddings", "Fine-tuning concepts", "Token usage"] },
+        { topic: "🧬 Deep Learning", subtopics: ["Neurons & Activation", "Backpropagation", "Optimizers", "Loss functions", "Dropout & BatchNorm", "Overfitting in DL"] },
+        { topic: "⚡ Perceptron", subtopics: ["Single layer", "Activation step", "Linear separability", "Learning Rule", "XOR limitation", "Multilayer"] },
+        { topic: "🏛️ FNN, CNN & RNN", subtopics: ["FNN architecture", "CNN (Conv, Pooling)", "Popular CNNs", "RNN & vanishing gradient", "LSTM/GRU", "Seq2Seq"] },
+        { topic: "📖 Transformer", subtopics: ["Self-attention", "Positional encoding", "Multi-head attention", "Encoder-Decoder", "BERT & GPT basics", "Attention is all you need"] },
+        { topic: "🔧 TensorFlow", subtopics: ["Tensors & ops", "Keras API", "Sequential models", "Custom training", "TensorBoard", "Model saving"] },
+        { topic: "✨ GenAI", subtopics: ["Generative vs Discriminative", "Diffusion models", "VAE intuition", "Autoregressive generation", "Prompt engineering", "GenAI use cases"] },
+        { topic: "🤖 LLMs", subtopics: ["Transformer scale", "Pre-training & fine-tuning", "In-context learning", "Prompt patterns", "Alignment (RLHF)", "LLM evaluation"] },
+        { topic: "📝 NLP", subtopics: ["Tokenization", "Bag-of-words", "Word2Vec / GloVe", "Named Entity Recognition", "Sentiment analysis", "Transformers for NLP"] },
+        { topic: "📚 RAG", subtopics: ["Retrieval vs generation", "Vector databases", "Indexing & chunking", "Retriever", "Generation with context", "RAG evaluation"] },
+        { topic: "🎨 GAN", subtopics: ["Generator & Discriminator", "Adversarial training", "DCGAN", "Mode collapse", "Conditional GAN", "Applications"] },
+        { topic: "🌐 Flask (AI Dev)", subtopics: ["Routes & methods", "Templates", "REST API for ML", "Request handling", "Deploy with Gunicorn", "Model serving"] },
+        { topic: "🗄️ SQL for DS", subtopics: ["SELECT, WHERE, JOINs", "GROUP BY & Aggregations", "Subqueries & CTEs", "Window functions", "Indexing", "Data cleaning in SQL"] },
+        { topic: "📦 Git & GitHub", subtopics: ["init / clone / commit", "Branching & merging", "Pull requests", "Remote", "GitHub Actions", "Collaboration"] },
+        { topic: "🐳 Docker", subtopics: ["Dockerfile & images", "Containers vs VMs", "Docker Compose", "Volumes & networks", "Registry", "Containerizing ML apps"] },
+        { topic: "☸️ Kubernetes", subtopics: ["Pods & Deployments", "Services & Ingress", "ConfigMaps & Secrets", "Scaling & updates", "kubectl essentials", "K8s for AI workloads"] }
+    ];
+
+    // Build flat subtopics array
+    let allSubtopics = []; // each: { mainIdx, subIdx, label, completed }
+    let completedFlags = [];
+
+    function buildFlatStructure() {
+        allSubtopics = [];
+        for (let mIdx = 0; mIdx < curriculumData.length; mIdx++) {
+            const subs = curriculumData[mIdx].subtopics;
+            for (let sIdx = 0; sIdx < subs.length; sIdx++) {
+                allSubtopics.push({
+                    mainIdx: mIdx,
+                    subIdx: sIdx,
+                    label: subs[sIdx],
+                    completed: false
+                });
+            }
+        }
+        completedFlags = new Array(allSubtopics.length).fill(false);
+    }
+    buildFlatStructure();
+
+    const STORAGE_KEY = "ai_ml_shared_progress_v3";
+
+    // Load from localStorage
+    function loadProgress() {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+            try {
+                const arr = JSON.parse(saved);
+                if (Array.isArray(arr) && arr.length === allSubtopics.length) {
+                    completedFlags = arr.map(v => Boolean(v));
+                    for (let i = 0; i < allSubtopics.length; i++) {
+                        allSubtopics[i].completed = completedFlags[i];
+                    }
+                }
+            } catch(e) {}
+        } else {
+            resetFlagsToFalse();
+        }
+    }
+
+    function resetFlagsToFalse() {
+        for (let i = 0; i < allSubtopics.length; i++) {
+            allSubtopics[i].completed = false;
+            completedFlags[i] = false;
+        }
+    }
+
+    function saveProgressToLocal() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(completedFlags));
+    }
+
+    // Global UI update
+    let lastPercent = -1;
+    function updateGlobalStats() {
+        const total = allSubtopics.length;
+        const completedCount = completedFlags.filter(v => v === true).length;
+        const percent = total === 0 ? 0 : Math.floor((completedCount / total) * 100);
+        document.getElementById("completedSubCount").innerText = completedCount;
+        document.getElementById("totalSubCount").innerText = total;
+        document.getElementById("globalPercent").innerHTML = `${percent}%`;
+        const fillBar = document.getElementById("globalFillBar");
+        fillBar.style.width = `${percent}%`;
+        if (percent === 100 && lastPercent !== 100) triggerConfetti();
+        lastPercent = percent;
+        saveProgressToLocal();
+    }
+
+    function getTopicStats(mainIdx) {
+        const subs = allSubtopics.filter(st => st.mainIdx === mainIdx);
+        const done = subs.filter(st => st.completed).length;
+        return { totalSubs: subs.length, doneSubs: done };
+    }
+
+    function renderTopics() {
+        const container = document.getElementById("topicsGrid");
+        if (!container) return;
+        container.innerHTML = "";
+        for (let mIdx = 0; mIdx < curriculumData.length; mIdx++) {
+            const topicObj = curriculumData[mIdx];
+            const { totalSubs, doneSubs } = getTopicStats(mIdx);
+            const percentDone = totalSubs === 0 ? 0 : Math.round((doneSubs / totalSubs) * 100);
+            const card = document.createElement("div");
+            card.className = "topic-card";
+            const header = document.createElement("div");
+            header.className = "topic-header";
+            header.innerHTML = `<span class="topic-name">${topicObj.topic}</span>
+                                <span class="topic-stats">📌 ${doneSubs}/${totalSubs} · ${percentDone}%</span>`;
+            const subListDiv = document.createElement("div");
+            subListDiv.className = "subtopic-list";
+            const relatedSubs = allSubtopics.filter(st => st.mainIdx === mIdx);
+            for (let i = 0; i < relatedSubs.length; i++) {
+                const sub = relatedSubs[i];
+                const globalIdx = allSubtopics.findIndex(st => st.mainIdx === mIdx && st.subIdx === sub.subIdx);
+                const isCompleted = sub.completed;
+                const subDiv = document.createElement("div");
+                subDiv.className = `sub-item ${isCompleted ? 'completed' : ''}`;
+                const cb = document.createElement("input");
+                cb.type = "checkbox";
+                cb.checked = isCompleted;
+                cb.addEventListener("change", (e) => {
+                    const newState = cb.checked;
+                    allSubtopics[globalIdx].completed = newState;
+                    completedFlags[globalIdx] = newState;
+                    renderTopics();      // full re-render ensures consistency
+                    updateGlobalStats();
+                });
+                const label = document.createElement("label");
+                label.innerText = sub.label;
+                subDiv.appendChild(cb);
+                subDiv.appendChild(label);
+                subListDiv.appendChild(subDiv);
+            }
+            card.appendChild(header);
+            card.appendChild(subListDiv);
+            container.appendChild(card);
+        }
+        updateGlobalStats();
+    }
+
+    // Actions
+    function resetAll() {
+        if (confirm("⚠️ Reset all progress? This will uncheck every subtopic.")) {
+            resetFlagsToFalse();
+            renderTopics();
+            updateGlobalStats();
+        }
+    }
+
+    function markAllCompleted() {
+        if (confirm("✅ Mark ALL subtopics as mastered?")) {
+            for (let i = 0; i < allSubtopics.length; i++) {
+                allSubtopics[i].completed = true;
+                completedFlags[i] = true;
+            }
+            renderTopics();
+            updateGlobalStats();
+            triggerConfetti();
+        }
+    }
+
+    // Export progress to JSON file
+    function exportProgress() {
+        const dataStr = JSON.stringify(completedFlags, null, 2);
+        const blob = new Blob([dataStr], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `ai_ml_progress_${new Date().toISOString().slice(0,19)}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
+    // Import progress from JSON file
+    function importProgress(file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const imported = JSON.parse(e.target.result);
+                if (Array.isArray(imported) && imported.length === allSubtopics.length) {
+                    completedFlags = imported.map(v => Boolean(v));
+                    for (let i = 0; i < allSubtopics.length; i++) {
+                        allSubtopics[i].completed = completedFlags[i];
+                    }
+                    renderTopics();
+                    updateGlobalStats();
+                    alert("Progress imported successfully! Ticks updated.");
+                } else {
+                    alert("Invalid file: length mismatch. Please export from a compatible tracker.");
+                }
+            } catch(err) {
+                alert("Error parsing JSON file.");
+            }
+        };
+        reader.readAsText(file);
+    }
+
+    // Confetti effect
+    function triggerConfetti() {
+        const canvas = document.createElement("canvas");
+        canvas.style.position = "fixed";
+        canvas.style.top = "0";
+        canvas.style.left = "0";
+        canvas.style.width = "100%";
+        canvas.style.height = "100%";
+        canvas.style.pointerEvents = "none";
+        canvas.style.zIndex = "10000";
+        document.body.appendChild(canvas);
+        const ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        let particles = [];
+        const colors = ["#f97316", "#3b82f6", "#ef4444", "#10b981", "#facc15", "#a855f7"];
+        for (let i = 0; i < 130; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height - canvas.height,
+                size: Math.random() * 7 + 3,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                speedY: Math.random() * 8 + 5,
+                speedX: (Math.random() - 0.5) * 6,
+                rotation: Math.random() * 360,
+                spin: (Math.random() - 0.5) * 14
+            });
+        }
+        let animId;
+        const start = performance.now();
+        function animate(now) {
+            if (now - start > 2000) {
+                if (animId) cancelAnimationFrame(animId);
+                canvas.remove();
+                return;
+            }
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let p of particles) {
+                p.y += p.speedY;
+                p.x += p.speedX;
+                p.rotation += p.spin;
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate(p.rotation * Math.PI / 180);
+                ctx.fillStyle = p.color;
+                ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
+                ctx.restore();
+            }
+            animId = requestAnimationFrame(animate);
+        }
+        animId = requestAnimationFrame(animate);
+    }
+
+    function bindEvents() {
+        document.getElementById("resetAllBtn").addEventListener("click", resetAll);
+        document.getElementById("markAllSubtopicsBtn").addEventListener("click", markAllCompleted);
+        document.getElementById("exportBtn").addEventListener("click", exportProgress);
+        const fileInput = document.getElementById("importFileInput");
+        fileInput.addEventListener("change", (e) => {
+            if (e.target.files && e.target.files[0]) {
+                importProgress(e.target.files[0]);
+                fileInput.value = ""; // allow re-upload same file later
+            }
+        });
+    }
+
+    function init() {
+        loadProgress();
+        renderTopics();
+        bindEvents();
+    }
+    init();
+</script>
+</body>
+</html>

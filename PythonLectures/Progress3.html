@@ -1,0 +1,585 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>AI/ML Mastery: Progress Tracker | Learn with Precision</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #f0f4fc 0%, #e6edf7 100%);
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            padding: 2rem 1.5rem;
+            color: #1a2c3e;
+        }
+
+        /* smooth container */
+        .tracker-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* header card */
+        .header-card {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(2px);
+            border-radius: 2.5rem;
+            padding: 1.8rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(255,255,255,0.6);
+            transition: all 0.2s;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1F2B48, #2C3E66);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.3px;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        h1::before {
+            content: "📘";
+            font-size: 2rem;
+            background: none;
+            -webkit-background-clip: unset;
+            color: #2c5282;
+        }
+
+        .sub {
+            color: #4a627a;
+            margin-top: 0.5rem;
+            font-weight: 500;
+            border-left: 4px solid #3b82f6;
+            padding-left: 1rem;
+            font-size: 1rem;
+        }
+
+        /* progress main area */
+        .progress-global {
+            background: #ffffffcc;
+            backdrop-filter: blur(4px);
+            border-radius: 2rem;
+            padding: 1.2rem 1.8rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(59,130,246,0.2);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .stats-left {
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: #1e293b;
+        }
+
+        .stats-left span {
+            font-weight: 800;
+            font-size: 1.9rem;
+            color: #2563eb;
+            margin: 0 4px;
+        }
+
+        .percentage-text {
+            font-size: 1.8rem;
+            font-weight: 800;
+            font-family: monospace;
+            background: #1e293b;
+            display: inline-block;
+            padding: 0.2rem 1rem;
+            border-radius: 60px;
+            color: white;
+            letter-spacing: 1px;
+        }
+
+        .progress-bar-bg {
+            background: #e2e8f0;
+            border-radius: 60px;
+            height: 1.2rem;
+            overflow: hidden;
+            box-shadow: inset 0 1px 3px #00000010;
+            margin: 0.75rem 0 1rem 0;
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #2563eb, #38bdf8);
+            border-radius: 60px;
+            transition: width 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            box-shadow: 0 0 6px #3b82f670;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            border: none;
+            background: #f1f5f9;
+            padding: 0.5rem 1.3rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.2s;
+            color: #1e293b;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+            box-shadow: 0 4px 10px rgba(37,99,235,0.2);
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        .btn-outline:hover {
+            background: #e2e8f0;
+            transform: translateY(-1px);
+        }
+
+        /* topics grid */
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1rem;
+        }
+
+        .topic-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 0.8rem 1rem 0.8rem 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.2s ease;
+            border: 1px solid #e9edf2;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            backdrop-filter: blur(2px);
+        }
+
+        .topic-card:hover {
+            border-color: #b9d0f0;
+            box-shadow: 0 8px 20px -12px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+            background: #fefefe;
+        }
+
+        .topic-name {
+            font-weight: 530;
+            font-size: 0.95rem;
+            color: #0f2b3d;
+            word-break: break-word;
+            padding-right: 0.8rem;
+            flex: 1;
+            line-height: 1.4;
+        }
+
+        /* custom checkbox */
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .checkbox-custom {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 1.7rem;
+            height: 1.7rem;
+            background: #f1f5f9;
+            border-radius: 12px;
+            border: 2px solid #cbd5e1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.15s;
+        }
+
+        .checkbox-custom:checked {
+            background: #2563eb;
+            border-color: #2563eb;
+            position: relative;
+        }
+
+        .checkbox-custom:checked::after {
+            content: "✓";
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .checkbox-custom:hover {
+            border-color: #3b82f6;
+            background: #eef2ff;
+        }
+
+        /* footer and small */
+        .footer-note {
+            margin-top: 2.5rem;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #5c6f87;
+            border-top: 1px solid #dce5ef;
+            padding-top: 1.5rem;
+        }
+
+        @media (max-width: 680px) {
+            body {
+                padding: 1rem;
+            }
+            .topics-grid {
+                grid-template-columns: 1fr;
+            }
+            .stats {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .percentage-text {
+                font-size: 1.3rem;
+                padding: 0.1rem 0.8rem;
+            }
+            h1 {
+                font-size: 1.6rem;
+            }
+        }
+
+        .confetti-trigger {
+            transition: 0.1s;
+        }
+        .badge-complete {
+            background: #d9f0e2;
+            border-left: 4px solid #10b981;
+        }
+    </style>
+</head>
+<body>
+<div class="tracker-container">
+    <div class="header-card">
+        <h1>🚀 AI/ML Prime · Progress Forge</h1>
+        <div class="sub">Systematic mastery: from Python foundations → LLMs, Transformers, MLOps & GenAI. Check each topic as you conquer it.</div>
+    </div>
+
+    <div class="progress-global">
+        <div class="stats">
+            <div class="stats-left">
+                📊 Learning velocity · <span id="completedCount">0</span> / <span id="totalCount">0</span> topics mastered
+            </div>
+            <div class="percentage-text" id="percentageDisplay">0%</div>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-fill" id="globalProgressFill" style="width:0%"></div>
+        </div>
+        <div class="action-buttons">
+            <button class="btn btn-outline" id="resetBtn" aria-label="Reset all progress">⟳ Reset all</button>
+            <button class="btn btn-primary" id="markAllBtn">✅ Mark all completed</button>
+        </div>
+    </div>
+
+    <div class="topics-grid" id="topicsContainer"></div>
+    <div class="footer-note">
+        💾 Auto-saves to browser · Your learning journey stays private. <br>
+        ⚡ "Ek ek karke, har concept par command" — track progress, stay motivated.
+    </div>
+</div>
+
+<script>
+    // --------------------------------------------------------------
+    // CURRICULUM DATA (exactly as listed by the user)
+    // --------------------------------------------------------------
+    const CURRICULUM_RAW = [
+        "Python",
+        "Data Pre-processing",
+        "Data Visualization",
+        "Math for AI (Statistics & Probability)",
+        "Precision, Recall, F1",
+        "Bias/Variance Tradeoff",
+        "Machine learning",
+        "Supervised (Regression, classification)",
+        "Unsupervised (Clustering, association)",
+        "Reinforcement learning",
+        "Logistic regression",
+        "SVM, Decision Tree",
+        "K-means clustering",
+        "OpenAI APIs",
+        "Deep learning",
+        "Perceptron",
+        "FNN, CNN & RNN architecture",
+        "Transformer",
+        "Tensorflow",
+        "GenAI",
+        "LLMs",
+        "NLP",
+        "RAG",
+        "GAN",
+        "Flask (Development with AI)",
+        "SQL for Data science",
+        "Git & GitHub",
+        "Docker",
+        "Kubernetes"
+    ];
+
+    // unique key for localStorage
+    const STORAGE_KEY = "ai_ml_progress_tracker_v1";
+
+    // global state: boolean array, true = completed
+    let completedStatus = new Array(CURRICULUM_RAW.length).fill(false);
+
+    // DOM elements
+    const topicsContainer = document.getElementById("topicsContainer");
+    const completedCountSpan = document.getElementById("completedCount");
+    const totalCountSpan = document.getElementById("totalCount");
+    const percentageDisplay = document.getElementById("percentageDisplay");
+    const globalProgressFill = document.getElementById("globalProgressFill");
+    const resetBtn = document.getElementById("resetBtn");
+    const markAllBtn = document.getElementById("markAllBtn");
+
+    // helper: update all UI (counters, progress bar, store, optional confetti on 100%)
+    let previousPercent = 0;
+
+    function updateAllUI() {
+        const total = CURRICULUM_RAW.length;
+        const completed = completedStatus.filter(v => v === true).length;
+        const percent = total === 0 ? 0 : Math.round((completed / total) * 100);
+        
+        // update numeric displays
+        completedCountSpan.innerText = completed;
+        totalCountSpan.innerText = total;
+        percentageDisplay.innerText = `${percent}%`;
+        globalProgressFill.style.width = `${percent}%`;
+        
+        // optional confetti effect when hitting exactly 100% for the first time (or crossing)
+        if (percent === 100 && previousPercent !== 100) {
+            triggerConfetti();
+        }
+        previousPercent = percent;
+        
+        // save to localStorage
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(completedStatus));
+        
+        // also update any topic card styling if needed? we'll re-render entire grid? 
+        // but for performance and consistent state, we simply re-render topic list only when needed.
+        // but we can also update individual checkbox state without full re-render to preserve smoothness.
+        // however re-rendering is simpler and ensures DOM sync, but we'll call renderTopics if state changes externally.
+        // renderTopics will be called on any modify operation (toggle, reset, markAll)
+    }
+    
+    // fancy confetti (light, vanilla, no external lib)
+    function triggerConfetti() {
+        // simple canvas confetti effect 
+        const canvas = document.createElement("canvas");
+        canvas.style.position = "fixed";
+        canvas.style.top = "0";
+        canvas.style.left = "0";
+        canvas.style.width = "100%";
+        canvas.style.height = "100%";
+        canvas.style.pointerEvents = "none";
+        canvas.style.zIndex = "9999";
+        document.body.appendChild(canvas);
+        
+        const ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        let particles = [];
+        const colors = ["#f97316", "#3b82f6", "#ef4444", "#10b981", "#facc15", "#a855f7"];
+        const PARTICLE_COUNT = 130;
+        
+        for (let i = 0; i < PARTICLE_COUNT; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height - canvas.height,
+                size: Math.random() * 6 + 3,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                speedY: Math.random() * 7 + 6,
+                speedX: (Math.random() - 0.5) * 5,
+                rotation: Math.random() * 360,
+                spin: (Math.random() - 0.5) * 12
+            });
+        }
+        
+        let animationId;
+        let startTime = performance.now();
+        function animateConfetti(now) {
+            const elapsed = (now - startTime);
+            if (elapsed > 1800) {
+                if (animationId) cancelAnimationFrame(animationId);
+                canvas.remove();
+                return;
+            }
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let p of particles) {
+                p.y += p.speedY;
+                p.x += p.speedX;
+                p.rotation += p.spin;
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate(p.rotation * Math.PI / 180);
+                ctx.fillStyle = p.color;
+                ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
+                ctx.restore();
+            }
+            animationId = requestAnimationFrame(animateConfetti);
+        }
+        animationId = requestAnimationFrame(animateConfetti);
+        // auto remove after timeout also fallback
+        setTimeout(() => {
+            if (animationId) cancelAnimationFrame(animationId);
+            if (canvas && canvas.parentNode) canvas.remove();
+        }, 1900);
+    }
+    
+    // render topic cards based on current completedStatus array
+    function renderTopics() {
+        if (!topicsContainer) return;
+        topicsContainer.innerHTML = "";
+        CURRICULUM_RAW.forEach((topic, idx) => {
+            const isCompleted = completedStatus[idx];
+            const card = document.createElement("div");
+            card.className = `topic-card ${isCompleted ? "badge-complete" : ""}`;
+            
+            const topicSpan = document.createElement("div");
+            topicSpan.className = "topic-name";
+            topicSpan.innerText = topic;
+            
+            const checkboxDiv = document.createElement("div");
+            checkboxDiv.className = "checkbox-wrapper";
+            
+            const checkBox = document.createElement("input");
+            checkBox.type = "checkbox";
+            checkBox.className = "checkbox-custom";
+            checkBox.checked = isCompleted;
+            // add event listener to toggle completion
+            checkBox.addEventListener("change", (e) => {
+                e.stopPropagation();
+                // update global completedStatus
+                completedStatus[idx] = checkBox.checked;
+                // Re-render to reflect style badge and update counters
+                renderTopics();
+                updateAllUI();  // updates numbers, progress bar, local storage & confetti
+                // optional: small haptic feedback
+            });
+            
+            checkboxDiv.appendChild(checkBox);
+            card.appendChild(topicSpan);
+            card.appendChild(checkboxDiv);
+            
+            // double-click or click on card can also toggle (optional) - makes UX nice
+            card.addEventListener("click", (e) => {
+                // avoid if the click came from checkbox itself (already handled)
+                if (e.target === checkBox) return;
+                // toggle manually
+                completedStatus[idx] = !completedStatus[idx];
+                renderTopics();
+                updateAllUI();
+            });
+            
+            topicsContainer.appendChild(card);
+        });
+    }
+    
+    // reset all progress (set all false)
+    function resetAllProgress() {
+        if (confirm("⚠️ Reset all progress? This will uncheck all topics. You can always mark them again.")) {
+            completedStatus.fill(false);
+            renderTopics();
+            updateAllUI();
+            // optional smooth scroll to top
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+    }
+    
+    // mark all as completed
+    function markAllCompleted() {
+        const allCompletedAlready = completedStatus.every(v => v === true);
+        if (allCompletedAlready) {
+            alert("🎉 You have already mastered all topics! Great consistency.");
+            return;
+        }
+        if (confirm("✅ Mark every topic as completed? This will set your progress to 100%.")) {
+            completedStatus.fill(true);
+            renderTopics();
+            updateAllUI();
+            triggerConfetti(); // extra celebration
+        }
+    }
+    
+    // load saved data from localStorage
+    function loadProgress() {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+            try {
+                const parsed = JSON.parse(saved);
+                if (Array.isArray(parsed) && parsed.length === CURRICULUM_RAW.length) {
+                    completedStatus = parsed.map(v => Boolean(v));
+                } else {
+                    // if length mismatch, fallback and reset storage
+                    console.warn("Saved data length mismatch, reinitializing");
+                    completedStatus = new Array(CURRICULUM_RAW.length).fill(false);
+                }
+            } catch(e) {
+                completedStatus = new Array(CURRICULUM_RAW.length).fill(false);
+            }
+        } else {
+            // first time user: default all false
+            completedStatus = new Array(CURRICULUM_RAW.length).fill(false);
+        }
+        // render & update after loading
+        renderTopics();
+        updateAllUI();
+    }
+    
+    // extra small feature: sort topics optionally? but keep original order as per curriculum
+    // add keyboard / helper 
+    function initEventListeners() {
+        if (resetBtn) resetBtn.addEventListener("click", resetAllProgress);
+        if (markAllBtn) markAllBtn.addEventListener("click", markAllCompleted);
+    }
+    
+    // optional: export / import? but simple robust tracker for single user
+    // also monitor beforeunload not needed.
+    
+    // initialize app
+    function init() {
+        totalCountSpan.innerText = CURRICULUM_RAW.length;
+        loadProgress();
+        initEventListeners();
+        // small additional styling for badge after render dynamic
+    }
+    
+    init();
+</script>
+</body>
+</html>
