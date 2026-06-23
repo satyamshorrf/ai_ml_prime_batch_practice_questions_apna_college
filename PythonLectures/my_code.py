@@ -208,8 +208,8 @@ print(val, type (val))
 username = input("enter your name:")
 print(username)
 
-a = input("Enter First Number:- ")
-b = input("Enter Second Number:- ")
+a = int (input("Enter First Number:- "))
+b = int (input("Enter Second Number:- "))
 
 sum =(a+b)
 print(sum)
