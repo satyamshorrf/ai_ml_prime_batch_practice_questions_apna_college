@@ -64,7 +64,39 @@ sum = first_number + second_number
 
 print("The sum is:", sum)
 
+''' 
+Variables in Python
+
+'''
 
 
+name = "Satyam"
+age = 20
 
+PI = 3.14
+
+print ("My name is", name)
+print ("I am", age, "years old")
+
+
+#Operators in Python
+
+#artithmetic operators
+
+
+a = 10
+b = 5
+
+c = a + b
+print ("The sum is:", c)
+
+
+d = a - b
+print ("The difference is:", d)
+
+e = a * b
+print ("The product is:", e)
+
+f = a / b
+print ("The division is:", f)
 
