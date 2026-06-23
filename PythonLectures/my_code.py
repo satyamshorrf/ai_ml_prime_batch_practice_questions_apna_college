@@ -128,3 +128,35 @@ print (a not in [1, 2, 3, 4, 5])
 print(6 > 99)
 
 print(6 < 99)
+
+
+#Assignment operators
+
+a = 10
+a = a + 5
+print (a)
+
+a += 5
+print (a)
+a -= 5
+print (a)
+a *= 5
+print (a)
+a /= 5
+print (a)
+a %= 5
+print (a)
+
+
+a = 39
+a *= 5
+print (a)
+
+a **= 5
+print (a)
+
+
+
+
+
+
