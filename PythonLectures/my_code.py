@@ -156,6 +156,36 @@ a **= 5
 print (a)
 
 
+#Logical operators
+
+#And Operators
+
+var = False 
+
+
+print((5 > 3 ) and (3 > 2))  # True
+print((5 > 3 ) and (3 > 8))  # True
+
+x = 3 
+x += 5 
+print(x)
+
+# Operator Precedence 
+'''
+()
+**
+*, /, % 
++, -
+==, !=, >, >=, <, <= 
+
+not 
+and 
+or 
+
+
+
+
+'''
 
 
 
