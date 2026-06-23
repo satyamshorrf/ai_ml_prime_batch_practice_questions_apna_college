@@ -213,3 +213,26 @@ b = int (input("Enter Second Number:- "))
 
 sum =(a+b)
 print(sum)
+
+# WAP to print average of 2 numbers
+
+# Begineer Tarika 
+a = 10 
+b = 20 
+
+c = a+b
+
+e = c/2
+
+print(e)
+
+
+# Legend Tarika 
+
+
+a = float(input("enter 1st num:- "))
+b = float(input("enter 2nd num:- "))
+
+avg = (a+b)/2
+
+print("avg of 2 nums =", avg)
