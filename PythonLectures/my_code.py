@@ -199,3 +199,17 @@ print(ans2, type(ans2))
 val = str("123")
 
 print(val, type (val))
+
+
+
+
+# User Input
+
+username = input("enter your name:")
+print(username)
+
+a = input("Enter First Number:- ")
+b = input("Enter Second Number:- ")
+
+sum =(a+b)
+print(sum)
