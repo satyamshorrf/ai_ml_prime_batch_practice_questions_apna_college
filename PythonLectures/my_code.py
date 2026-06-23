@@ -187,6 +187,15 @@ or
 
 '''
 
+# Type Conversion
+
+ans1 = int(8 +40.9) #casting
+ans2 = 8 + 39.9 #conversion
 
 
+print(ans1, type(ans1))
+print(ans2, type(ans2))
 
+val = str("123")
+
+print(val, type (val))
