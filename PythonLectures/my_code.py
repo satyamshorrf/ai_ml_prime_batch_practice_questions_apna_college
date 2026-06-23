@@ -100,3 +100,31 @@ print ("The product is:", e)
 f = a / b
 print ("The division is:", f)
 
+g = a % b
+print ("The remainder is:", g)
+
+print (a**b)
+
+
+#Relational operators / comparison operators
+
+a = 10
+b = 5
+
+print (a > b)
+print (a < b)
+print (a >= b)
+print (a <= b)
+
+print (a == b)
+print (a != b)
+print (a is b)
+
+print (a is not b)
+
+print (a in [1, 2, 3, 4, 5])
+print (a not in [1, 2, 3, 4, 5])
+
+print(6 > 99)
+
+print(6 < 99)
